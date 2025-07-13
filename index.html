@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Study Routine</title>
+  <style>
+    :root {
+      --bg: #121212;
+      --text: #e0e0e0;
+      --card: #1e1e1e;
+      --highlight: #bb86fc;
+      --button: #03dac6;
+    }
+    body.light {
+      --bg: #f5f7fa;
+      --text: #111;
+      --card: #fff;
+      --highlight: #3f51b5;
+      --button: #6200ee;
+    }
+    body {
+      font-family: "Kalpurush", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 20px;
+      animation: fadeIn 1.5s ease-in-out;
+      transition: all 0.3s ease;
+    }
+    h1 {
+      text-align: center;
+      color: var(--highlight);
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
+    .controls {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .countdown {
+      text-align: center;
+      font-size: 1.5em;
+      margin-bottom: 20px;
+      background: var(--card);
+      padding: 10px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #333;
+      animation: pulse 2s infinite;
+    }
+    .chapter {
+      background: var(--card);
+      padding: 20px;
+      border-radius: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+      transform: scale(1);
+    }
+    .chapter:hover {
+      transform: scale(1.02);
+    }
+    .title {
+      font-size: 1.3em;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: var(--highlight);
+    }
+    .checklist label {
+      display: block;
+      margin: 5px 0;
+      cursor: pointer;
+    }
+    input[type="checkbox"] {
+      margin-right: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: var(--button);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      opacity: 0.9;
+    }
+    .progress {
+      height: 10px;
+      border-radius: 10px;
+      background: #555;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      background: var(--highlight);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 10px #333; }
+      50% { box-shadow: 0 0 20px #555; }
+      100% { box-shadow: 0 0 10px #333; }
+    }
+    @media (max-width: 600px) {
+      .chapter {
+        padding: 15px;
+      }
+      .title {
+        font-size: 1.1em;
+      }
+      button {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>রসায়ন চেকলিস্ট</h1>
+  <div class="controls">
+    <button id="startBtn">সময় গণনা শুরু করো</button>
+    <button id="themeToggle">🌗 থিম পরিবর্তন</button>
+  </div>
+  <div class="countdown" id="countdown">সময় গণনা বন্ধ আছে</div>
+
+  <div class="chapter" data-keys="q1,q2,q3,q4">
+    <div class="title">১. গুণগত রসায়ন</div>
+    <div class="checklist">
+      <label><input type="checkbox" data-key="q1"> ক্লাস</label>
+      <label><input type="checkbox" data-key="q2"> এমসিকিউ</label>
+      <label><input type="checkbox" data-key="q3"> সিকিউ (গ-ঘ)</label>
+      <label><input type="checkbox" data-key="q4"> সিকিউ (ক-খ)</label>
+    </div>
+    <div class="progress"><div class="progress-bar"></div></div>
+  </div>
+
+  <div class="chapter" data-keys="q5,q6,q7,q8">
+    <div class="title">২. রাসায়নিক পরিবর্তন</div>
+    <div class="checklist">
+      <label><input type="checkbox" data-key="q5"> ক্লাস</label>
+      <label><input type="checkbox" data-key="q6"> এমসিকিউ</label>
+      <label><input type="checkbox" data-key="q7"> সিকিউ (গ-ঘ)</label>
+      <label><input type="checkbox" data-key="q8"> সিকিউ (ক-খ)</label>
+    </div>
+    <div class="progress"><div class="progress-bar"></div></div>
+  </div>
+
+  <div class="chapter" data-keys="q9,q10,q11,q12">
+    <div class="title">৩. কর্মমুখী রসায়ন</div>
+    <div class="checklist">
+      <label><input type="checkbox" data-key="q9"> ক্লাস</label>
+      <label><input type="checkbox" data-key="q10"> এমসিকিউ</label>
+      <label><input type="checkbox" data-key="q11"> সিকিউ (গ-ঘ)</label>
+      <label><input type="checkbox" data-key="q12"> সিকিউ (ক-খ)</label>
+    </div>
+    <div class="progress"><div class="progress-bar"></div></div>
+  </div>
+
+  <div class="chapter" data-keys="q13,q14,q15,q16">
+    <div class="title">৪. পরিবেশ রসায়ন</div>
+    <div class="checklist">
+      <label><input type="checkbox" data-key="q13"> ক্লাস</label>
+      <label><input type="checkbox" data-key="q14"> এমসিকিউ</label>
+      <label><input type="checkbox" data-key="q15"> সিকিউ (গ-ঘ)</label>
+      <label><input type="checkbox" data-key="q16"> সিকিউ (ক-খ)</label>
+    </div>
+    <div class="progress"><div class="progress-bar"></div></div>
+  </div>
+
+  <div class="chapter" data-keys="q17,q18,q19,q20">
+    <div class="title">৫. পরিমানগত রসায়ন</div>
+    <div class="checklist">
+      <label><input type="checkbox" data-key="q17"> ক্লাস</label>
+      <label><input type="checkbox" data-key="q18"> এমসিকিউ</label>
+      <label><input type="checkbox" data-key="q19"> সিকিউ (গ-ঘ)</label>
+      <label><input type="checkbox" data-key="q20"> সিকিউ (ক-খ)</label>
+    </div>
+    <div class="progress"><div class="progress-bar"></div></div>
+  </div>
+
+  <div class="chapter" data-keys="q21,q22,q23,q24">
+    <div class="title">৬. জৈব রসায়ন</div>
+    <div class="checklist">
+      <label><input type="checkbox" data-key="q21"> ক্লাস</label>
+      <label><input type="checkbox" data-key="q22"> এমসিকিউ</label>
+      <label><input type="checkbox" data-key="q23"> সিকিউ (গ-ঘ)</label>
+      <label><input type="checkbox" data-key="q24"> সিকিউ (ক-খ)</label>
+    </div>
+    <div class="progress"><div class="progress-bar"></div></div>
+  </div>
+
+  <script>
+    const endDate = new Date("2025-07-19T23:59:59+06:00").getTime();
+    const countdownElement = document.getElementById("countdown");
+    const startBtn = document.getElementById("startBtn");
+    const themeToggle = document.getElementById("themeToggle");
+    let intervalId;
+    let clickCount = 0;
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = endDate - now;
+      if (distance < 0) {
+        countdownElement.innerText = "সময় শেষ!";
+        return;
+      }
+      const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const s = Math.floor((distance % (1000 * 60)) / 1000);
+      countdownElement.innerText = `শেষ সময় বাকি: ${d} দিন ${h} ঘন্টা ${m} মিনিট ${s} সেকেন্ড`;
+    }
+
+    startBtn.addEventListener("click", () => {
+      clickCount++;
+      if (clickCount === 3) {
+        localStorage.clear();
+        location.reload();
+      }
+      if (!intervalId) {
+        intervalId = setInterval(updateCountdown, 1000);
+        updateCountdown();
+      }
+    });
+
+    themeToggle.addEventListener("click", () => {
+      document.body.classList.toggle("light");
+    });
+
+    const checkboxes = document.querySelectorAll("input[type='checkbox']");
+    checkboxes.forEach(cb => {
+      const key = cb.dataset.key;
+      cb.checked = localStorage.getItem(key) === "true";
+      cb.addEventListener("change", () => {
+        localStorage.setItem(key, cb.checked);
+        updateProgressBars();
+      });
+    });
+
+    function updateProgressBars() {
+      document.querySelectorAll(".chapter").forEach(chapter => {
+        const keys = chapter.dataset.keys.split(',');
+        const total = keys.length;
+        let done = 0;
+        keys.forEach(k => {
+          if (localStorage.getItem(k) === "true") done++;
+        });
+        const percent = (done / total) * 100;
+        chapter.querySelector(".progress-bar").style.width = `${percent}%`;
+      });
+    }
+
+    updateProgressBars();
+  </script>
+</body>
+</html>
