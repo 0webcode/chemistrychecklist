@@ -1,244 +1,96 @@
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Chemistry Checklist for HSC-25</title>
   <style>
-    :root {
-      --bg: #121212;
-      --text: #e0e0e0;
-      --card: #1e1e1e;
-      --highlight: #bb86fc;
-      --button: #03dac6;
-    }
-    body.light {
-      --bg: #f5f7fa;
-      --text: #111;
-      --card: #fff;
-      --highlight: #3f51b5;
-      --button: #6200ee;
-    }
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap');
+
     body {
-      font-family: "Kalpurush", sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      padding: 20px;
-      animation: fadeIn 1.5s ease-in-out;
-      transition: all 0.3s ease;
-    }
-    h1 {
-      text-align: center;
-      color: var(--highlight);
-      font-size: 2em;
-      margin-bottom: 20px;
-    }
-    .controls {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .countdown {
-      text-align: center;
-      font-size: 1.5em;
-      margin-bottom: 20px;
-      background: var(--card);
-      padding: 10px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px #333;
-      animation: pulse 2s infinite;
-    }
-    .chapter {
-      background: var(--card);
-      padding: 20px;
-      border-radius: 15px;
-      margin-bottom: 20px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      transition: transform 0.3s;
-      transform: scale(1);
-    }
-    .chapter:hover {
-      transform: scale(1.02);
-    }
-    .title {
-      font-size: 1.3em;
-      font-weight: bold;
-      margin-bottom: 10px;
-      color: var(--highlight);
-    }
-    .checklist label {
-      display: block;
-      margin: 5px 0;
-      cursor: pointer;
-    }
-    input[type="checkbox"] {
-      margin-right: 10px;
-    }
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-      background-color: var(--button);
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    button:hover {
-      opacity: 0.9;
-    }
-    .progress {
-      height: 10px;
-      border-radius: 10px;
-      background: #555;
-      margin-top: 10px;
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Poppins', sans-serif;
       overflow: hidden;
-    }
-    .progress-bar {
-      height: 100%;
-      background: var(--highlight);
-      width: 0%;
-      transition: width 0.3s ease;
-    }
-    #totalProgressContainer {
-      margin-top: 50px;
+      color: white;
       text-align: center;
+      padding: 0 20px;
     }
-    #totalProgressText {
-      margin-top: 8px;
-      font-weight: bold;
+
+    h1 {
+      font-size: 8vw;
+      position: relative;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      background: linear-gradient(270deg, #ff416c, #ff4b2b, #1fa2ff, #12d8fa, #a6ffcb);
+      background-size: 1000% 1000%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: gradientFlow 10s ease infinite;
+      user-select: none;
+      margin: 0;
     }
-    @keyframes fadeIn {
-      from {opacity: 0;}
-      to {opacity: 1;}
+
+    @keyframes gradientFlow {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
     }
-    @keyframes pulse {
-      0% { box-shadow: 0 0 10px #333; }
-      50% { box-shadow: 0 0 20px #555; }
-      100% { box-shadow: 0 0 10px #333; }
+
+    h1::after {
+      content: 'Maintenance Break';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      filter: blur(10px);
+      opacity: 0.3;
+      z-index: -1;
+      background: linear-gradient(270deg, #ff416c, #ff4b2b, #1fa2ff, #12d8fa, #a6ffcb);
+      background-size: 1000% 1000%;
+      animation: gradientFlow 10s ease infinite;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
+
+    p {
+      margin-top: 20px;
+      font-size: 2vw;
+      opacity: 0;
+      animation: fadeInOut 4s ease-in-out infinite;
+      max-width: 400px;
+      user-select: none;
+    }
+
+    @keyframes fadeInOut {
+      0%, 100% {opacity: 0;}
+      50% {opacity: 1;}
+    }
+
     @media (max-width: 600px) {
-      .chapter {
-        padding: 15px;
+      h1 {
+        font-size: 14vw;
       }
-      .title {
-        font-size: 1.1em;
-      }
-      button {
-        width: 100%;
-        margin-bottom: 10px;
+      p {
+        font-size: 4vw;
       }
     }
   </style>
 </head>
 <body>
-  <h1>রসায়ন চেকলিস্ট - ২৫</h1>
-  <div class="controls">
-    <button id="startBtn">সময় গণনা শুরু করো</button>
-    <button id="themeToggle">🌗 থিম পরিবর্তন</button>
-  </div>
-  <div class="countdown" id="countdown">সময় গণনা বন্ধ আছে</div>
-
-  <!-- এখানে আগের চ্যাপ্টার গুলো থাকবে (same as before) -->
-
-  <!-- Total Progress -->
-  <div id="totalProgressContainer">
-    <h2>📊 মোট অগ্রগতি</h2>
-    <div class="progress">
-      <div class="progress-bar" id="totalProgressBar"></div>
-    </div>
-    <p id="totalProgressText"></p>
-  </div>
-
-  <script>
-    const countdownElement = document.getElementById("countdown");
-    const startBtn = document.getElementById("startBtn");
-    const themeToggle = document.getElementById("themeToggle");
-    const deadline1 = new Date("2025-07-20T10:00:00+06:00").getTime();
-    const deadline2 = new Date("2025-07-22T10:00:00+06:00").getTime();
-    let intervalId, clickCount = 0;
-
-    function updateCountdown() {
-      const now = new Date().getTime();
-      let distance = deadline2 - now;
-      if (distance < 0) {
-        countdownElement.innerText = "⛔ সব সময় শেষ!";
-        return;
-      }
-      const d = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const s = Math.floor((distance % (1000 * 60)) / 1000);
-      countdownElement.innerText = `শেষ সময় বাকি: ${d} দিন ${h} ঘন্টা ${m} মিনিট ${s} সেকেন্ড`;
-    }
-
-    startBtn.addEventListener("click", () => {
-      clickCount++;
-      if (clickCount === 3) {
-        localStorage.clear();
-        location.reload();
-      }
-      if (!intervalId) {
-        intervalId = setInterval(updateCountdown, 1000);
-        updateCountdown();
-      }
-    });
-
-    themeToggle.addEventListener("click", () => {
-      document.body.classList.toggle("light");
-    });
-
-    const checkboxes = document.querySelectorAll("input[type='checkbox']");
-    checkboxes.forEach(cb => {
-      const key = cb.dataset.key;
-      cb.checked = localStorage.getItem(key) === "true";
-      cb.addEventListener("change", () => {
-        localStorage.setItem(key, cb.checked);
-        updateProgressBars();
-      });
-    });
-
-    function updateProgressBars() {
-      let totalDone = 0;
-      let totalItems = 0;
-
-      document.querySelectorAll(".chapter").forEach(chapter => {
-        const keys = chapter.dataset.keys.split(',');
-        const total = keys.length;
-        let done = 0;
-        keys.forEach(k => {
-          if (localStorage.getItem(k) === "true") done++;
-        });
-        const percent = (done / total) * 100;
-        chapter.querySelector(".progress-bar").style.width = `${percent}%`;
-        totalDone += done;
-        totalItems += total;
-      });
-
-      const totalPercent = (totalDone / totalItems) * 100;
-      document.getElementById("totalProgressBar").style.width = `${totalPercent}%`;
-      document.getElementById("totalProgressText").innerText = `মোট অগ্রগতি: ${Math.round(totalPercent)}%`;
-    }
-
-    function lockExpiredChapters() {
-      const now = new Date().getTime();
-      document.querySelectorAll(".chapter").forEach((chapter, index) => {
-        if ((index < 3 && now > deadline1) || (index >= 3 && now > deadline2)) {
-          chapter.querySelectorAll("input[type='checkbox']").forEach(cb => {
-            cb.disabled = true;
-          });
-          const expiredLabel = document.createElement("div");
-          expiredLabel.style.color = "red";
-          expiredLabel.style.marginTop = "10px";
-          expiredLabel.style.fontWeight = "bold";
-          expiredLabel.innerText = "⛔ সময় শেষ - Expired";
-          chapter.appendChild(expiredLabel);
-        }
-      });
-    }
-
-    setInterval(lockExpiredChapters, 60000);
-    lockExpiredChapters();
-    updateProgressBars();
-  </script>
+  <h1>Maintenance Break</h1>
+  <p>Please wait until 8:00 PM</p>
 </body>
 </html>
