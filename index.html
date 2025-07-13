@@ -130,6 +130,7 @@
   </div>
   <div class="countdown" id="countdown">সময় গণনা বন্ধ আছে</div>
 
+  <!-- Chapter list (same as before) -->
   <div class="chapter" data-keys="q1,q2,q3,q4">
     <div class="title">১. গুণগত রসায়ন</div>
     <div class="checklist">
@@ -256,6 +257,39 @@
         chapter.querySelector(".progress-bar").style.width = `${percent}%`;
       });
     }
+
+    // ⏰ Notification permission
+    if ("Notification" in window && Notification.permission !== "granted") {
+      Notification.requestPermission();
+    }
+
+    // ✅ অগ্রগতি গোনার ফাংশন
+    function calculateTotalProgress() {
+      const totalKeys = 24;
+      let done = 0;
+      for (let i = 1; i <= totalKeys; i++) {
+        if (localStorage.getItem(`q${i}`) === "true") {
+          done++;
+        }
+      }
+      return Math.round((done / totalKeys) * 100);
+    }
+
+    // 🔔 Notification function
+    function showProgressNotification() {
+      if (Notification.permission === "granted") {
+        const percent = calculateTotalProgress();
+        new Notification(`📚 রসায়নে অগ্রগতি: ${percent}% সম্পন্ন হয়েছে!`);
+      }
+    }
+
+    // ⏳ প্রতি ৬ ঘণ্টায় Notification
+    setInterval(() => {
+      showProgressNotification();
+    }, 21600000);
+
+    // টেস্ট করতে চাইলে এটা চালাও (৩০ সেকেন্ডে একবার)
+    // setInterval(showProgressNotification, 30000);
 
     updateProgressBars();
   </script>
