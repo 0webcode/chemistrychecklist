@@ -1,96 +1,580 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Chemistry Checklist for HSC-25</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap');
-
+    :root {
+      --bg: #121212;
+      --text: #e0e0e0;
+      --card: #1e1e1e;
+      --highlight: #bb86fc;
+      --button: #03dac6;
+      --progress-bg: #555;
+    }
+    body.light {
+      --bg: #f5f7fa;
+      --text: #111;
+      --card: #fff;
+      --highlight: #3f51b5;
+      --button: #6200ee;
+      --progress-bg: #ccc;
+    }
     body {
-      margin: 0;
-      height: 100vh;
-      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      font-family: "Kalpurush", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 20px;
+      animation: fadeIn 1.5s ease-in-out;
+      transition: all 0.3s ease;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
-      font-family: 'Poppins', sans-serif;
-      overflow: hidden;
-      color: white;
-      text-align: center;
-      padding: 0 20px;
     }
-
     h1 {
-      font-size: 8vw;
+      text-align: center;
+      color: var(--highlight);
+      font-size: 2em;
+      margin-bottom: 20px;
+      user-select: none;
+    }
+    .controls {
+      text-align: center;
+      margin-bottom: 20px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .countdown {
+      text-align: center;
+      font-size: 1.5em;
+      margin-bottom: 10px;
+      background: var(--card);
+      padding: 10px 15px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #333;
+      animation: pulse 2s infinite;
+      min-width: 280px;
+      user-select: none;
+    }
+    /* Total progress bar container */
+    .total-progress-container {
+      width: 100%;
+      max-width: 700px;
+      background: var(--progress-bg);
+      height: 15px;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 30px;
+      box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+    }
+    .total-progress-bar {
+      height: 100%;
+      background: var(--highlight);
+      width: 0%;
+      transition: width 0.5s ease;
+    }
+    .chapter {
+      background: var(--card);
+      padding: 20px 25px 25px 25px;
+      border-radius: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+      transform: scale(1);
+      max-width: 700px;
+      width: 100%;
       position: relative;
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      background: linear-gradient(270deg, #ff416c, #ff4b2b, #1fa2ff, #12d8fa, #a6ffcb);
-      background-size: 1000% 1000%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: gradientFlow 10s ease infinite;
-      user-select: none;
-      margin: 0;
     }
-
-    @keyframes gradientFlow {
-      0% {
-        background-position: 0% 50%;
-      }
-      50% {
-        background-position: 100% 50%;
-      }
-      100% {
-        background-position: 0% 50%;
-      }
+    .chapter:hover:not(.locked) {
+      transform: scale(1.03);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+      cursor: pointer;
     }
-
-    h1::after {
-      content: 'Maintenance Break';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      filter: blur(10px);
-      opacity: 0.3;
-      z-index: -1;
-      background: linear-gradient(270deg, #ff416c, #ff4b2b, #1fa2ff, #12d8fa, #a6ffcb);
-      background-size: 1000% 1000%;
-      animation: gradientFlow 10s ease infinite;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-
-    p {
-      margin-top: 20px;
-      font-size: 2vw;
-      opacity: 0;
-      animation: fadeInOut 4s ease-in-out infinite;
-      max-width: 400px;
+    .title {
+      font-size: 1.4em;
+      font-weight: bold;
+      margin-bottom: 12px;
+      color: var(--highlight);
       user-select: none;
     }
-
-    @keyframes fadeInOut {
-      0%, 100% {opacity: 0;}
-      50% {opacity: 1;}
+    .checklist label {
+      display: block;
+      margin: 6px 0;
+      cursor: pointer;
+      font-size: 1em;
+      user-select: none;
     }
-
-    @media (max-width: 600px) {
-      h1 {
-        font-size: 14vw;
+    input[type="checkbox"] {
+      margin-right: 12px;
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      vertical-align: middle;
+    }
+    input[type="checkbox"]:disabled {
+      cursor: not-allowed;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: var(--button);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      user-select: none;
+    }
+    button:hover {
+      opacity: 0.9;
+    }
+    .progress {
+      height: 12px;
+      border-radius: 10px;
+      background: var(--progress-bg);
+      margin-top: 12px;
+      overflow: hidden;
+      box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
+    }
+    .progress-bar {
+      height: 100%;
+      background: var(--highlight);
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+    .expired-label {
+      color: #ff4444;
+      margin-top: 12px;
+      font-weight: 700;
+      font-size: 1.1em;
+      user-select: none;
+    }
+    /* Time set UI */
+    .time-setter {
+      margin-top: 15px;
+      background: var(--progress-bg);
+      padding: 12px 15px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      user-select: none;
+    }
+    .time-setter label {
+      font-size: 1em;
+      user-select: none;
+    }
+    .time-setter input[type="number"] {
+      width: 60px;
+      padding: 6px 8px;
+      border-radius: 8px;
+      border: none;
+      font-size: 1em;
+      outline: none;
+      user-select: text;
+    }
+    .time-setter button.set-time-btn {
+      background-color: var(--highlight);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .time-setter button.set-time-btn:hover {
+      background-color: #9a67ea;
+    }
+    /* Locked chapters style */
+    .chapter.locked {
+      opacity: 0.6;
+      pointer-events: none;
+      user-select: none;
+    }
+    /* Responsive */
+    @media (max-width: 700px) {
+      body {
+        padding: 15px 10px;
       }
-      p {
-        font-size: 4vw;
+      .chapter {
+        padding: 15px 20px 20px 20px;
       }
+      .title {
+        font-size: 1.2em;
+      }
+      .time-setter input[type="number"] {
+        width: 50px;
+      }
+      .controls {
+        flex-direction: column;
+      }
+      button {
+        width: 100%;
+      }
+      .countdown {
+        font-size: 1.2em;
+        min-width: auto;
+        padding: 8px 10px;
+      }
+    }
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 10px #333; }
+      50% { box-shadow: 0 0 20px #555; }
+      100% { box-shadow: 0 0 10px #333; }
     }
   </style>
 </head>
 <body>
-  <h1>Maintenance Break</h1>
-  <p>Please wait until 8:00 PM</p>
+  <h1>রসায়ন চেকলিস্ট - ২৫</h1>
+  <div class="controls">
+    <button id="startBtn">সময় গণনা শুরু করো</button>
+    <button id="themeToggle">🌗 থিম পরিবর্তন</button>
+  </div>
+  <div class="countdown" id="countdown">সময় গণনা বন্ধ আছে</div>
+
+  <!-- Total progress bar showing overall completion -->
+  <div class="total-progress-container" aria-label="মোট সম্পন্নতার অগ্রগতি">
+    <div class="total-progress-bar" id="totalProgressBar"></div>
+  </div>
+
+  <!-- Chapter cards -->
+  <div class="chapter" data-keys="q1,q2,q3,q4" data-index="0" data-time="0">
+    <div class="title">১. গুণগত রসায়ন</div>
+    <div class="checklist">
+      <label><input type="checkbox" data-key="q1" /> ক্লাস</label>
+      <label><input type="checkbox" data-key="q2" /> এমসিকিউ</label>
+      <label><input type="checkbox" data-key="q3" /> সিকিউ (গ-ঘ)</label>
+      <label><input type="checkbox" data-key="q4" /> সিকিউ (ক-খ)</label>
+    </div>
+    <div class="progress"><div class="progress-bar"></div></div>
+    <div class="time-setter" aria-label="সময় নির্ধারণ">
+      <label>সময় সেট করো: </label>
+      <input type="number" min="0" max="10" step="1" class="hours-input" aria-label="ঘণ্টা" placeholder="ঘণ্টা" /> ঘণ্টা
+      <input type="number" min="0" max="59" step="1" class="minutes-input" aria-label="মিনিট" placeholder="মিনিট" /> মিনিট
+      <button class="set-time-btn" aria-label="সময় সেট করো">সেট</button>
+      <div class="current-time-display" style="margin-left:auto; font-size:0.9em; color:#bbb; user-select:none;"></div>
+    </div>
+  </div>
+
+  <div class="chapter" data-keys="q5,q6,q7,q8" data-index="1" data-time="0">
+    <div class="title">২. রাসায়নিক পরিবর্তন</div>
+    <div class="checklist">
+      <label><input type="checkbox" data-key="q5" /> ক্লাস</label>
+      <label><input type="checkbox" data-key="q6" /> এমসিকিউ</label>
+      <label><input type="checkbox" data-key="q7" /> সিকিউ (গ-ঘ)</label>
+      <label><input type="checkbox" data-key="q8" /> সিকিউ (ক-খ)</label>
+    </div>
+    <div class="progress"><div class="progress-bar"></div></div>
+    <div class="time-setter" aria-label="সময় নির্ধারণ">
+      <label>সময় সেট করো: </label>
+      <input type="number" min="0" max="10" step="1" class="hours-input" aria-label="ঘণ্টা" placeholder="ঘণ্টা" /> ঘণ্টা
+      <input type="number" min="0" max="59" step="1" class="minutes-input" aria-label="মিনিট" placeholder="মিনিট" /> মিনিট
+      <button class="set-time-btn" aria-label="সময় সেট করো">সেট</button>
+      <div class="current-time-display" style="margin-left:auto; font-size:0.9em; color:#bbb; user-select:none;"></div>
+    </div>
+  </div>
+
+  <div class="chapter" data-keys="q9,q10,q11,q12" data-index="2" data-time="0">
+    <div class="title">৩. কর্মমুখী রসায়ন</div>
+    <div class="checklist">
+      <label><input type="checkbox" data-key="q9" /> ক্লাস</label>
+      <label><input type="checkbox" data-key="q10" /> এমসিকিউ</label>
+      <label><input type="checkbox" data-key="q11" /> সিকিউ (গ-ঘ)</label>
+      <label><input type="checkbox" data-key="q12" /> সিকিউ (ক-খ)</label>
+    </div>
+    <div class="progress"><div class="progress-bar"></div></div>
+    <div class="time-setter" aria-label="সময় নির্ধারণ">
+      <label>সময় সেট করো: </label>
+      <input type="number" min="0" max="10" step="1" class="hours-input" aria-label="ঘণ্টা" placeholder="ঘণ্টা" /> ঘণ্টা
+      <input type="number" min="0" max="59" step="1" class="minutes-input" aria-label="মিনিট" placeholder="মিনিট" /> মিনিট
+      <button class="set-time-btn" aria-label="সময় সেট করো">সেট</button>
+      <div class="current-time-display" style="margin-left:auto; font-size:0.9em; color:#bbb; user-select:none;"></div>
+    </div>
+  </div>
+
+  <div class="chapter" data-keys="q13,q14,q15,q16" data-index="3" data-time="0">
+    <div class="title">৪. পরিবেশ রসায়ন</div>
+    <div class="checklist">
+      <label><input type="checkbox" data-key="q13" /> ক্লাস</label>
+      <label><input type="checkbox" data-key="q14" /> এমসিকিউ</label>
+      <label><input type="checkbox" data-key="q15" /> সিকিউ (গ-ঘ)</label>
+      <label><input type="checkbox" data-key="q16" /> সিকিউ (ক-খ)</label>
+    </div>
+    <div class="progress"><div class="progress-bar"></div></div>
+    <div class="time-setter" aria-label="সময় নির্ধারণ">
+      <label>সময় সেট করো: </label>
+      <input type="number" min="0" max="10" step="1" class="hours-input" aria-label="ঘণ্টা" placeholder="ঘণ্টা" /> ঘণ্টা
+      <input type="number" min="0" max="59" step="1" class="minutes-input" aria-label="মিনিট" placeholder="মিনিট" /> মিনিট
+      <button class="set-time-btn" aria-label="সময় সেট করো">সেট</button>
+      <div class="current-time-display" style="margin-left:auto; font-size:0.9em; color:#bbb; user-select:none;"></div>
+    </div>
+  </div>
+
+  <div class="chapter" data-keys="q17,q18,q19,q20" data-index="4" data-time="0">
+    <div class="title">৫. পরিমানগত রসায়ন</div>
+    <div class="checklist">
+      <label><input type="checkbox" data-key="q17" /> ক্লাস</label>
+      <label><input type="checkbox" data-key="q18" /> এমসিকিউ</label>
+      <label><input type="checkbox" data-key="q19" /> সিকিউ (গ-ঘ)</label>
+      <label><input type="checkbox" data-key="q20" /> সিকিউ (ক-খ)</label>
+    </div>
+    <div class="progress"><div class="progress-bar"></div></div>
+    <div class="time-setter" aria-label="সময় নির্ধারণ">
+      <label>সময় সেট করো: </label>
+      <input type="number" min="0" max="10" step="1" class="hours-input" aria-label="ঘণ্টা" placeholder="ঘণ্টা" /> ঘণ্টা
+      <input type="number" min="0" max="59" step="1" class="minutes-input" aria-label="মিনিট" placeholder="মিনিট" /> মিনিট
+      <button class="set-time-btn" aria-label="সময় সেট করো">সেট</button>
+      <div class="current-time-display" style="margin-left:auto; font-size:0.9em; color:#bbb; user-select:none;"></div>
+    </div>
+  </div>
+
+  <div class="chapter" data-keys="q21,q22,q23,q24" data-index="5" data-time="0">
+    <div class="title">৬. জৈব রসায়ন</div>
+    <div class="checklist">
+      <label><input type="checkbox" data-key="q21" /> ক্লাস</label>
+      <label><input type="checkbox" data-key="q22" /> এমসিকিউ</label>
+      <label><input type="checkbox" data-key="q23" /> সিকিউ (গ-ঘ)</label>
+      <label><input type="checkbox" data-key="q24" /> সিকিউ (ক-খ)</label>
+    </div>
+    <div class="progress"><div class="progress-bar"></div></div>
+    <div class="time-setter" aria-label="সময় নির্ধারণ">
+      <label>সময় সেট করো: </label>
+      <input type="number" min="0" max="10" step="1" class="hours-input" aria-label="ঘণ্টা" placeholder="ঘণ্টা" /> ঘণ্টা
+      <input type="number" min="0" max="59" step="1" class="minutes-input" aria-label="মিনিট" placeholder="মিনিট" /> মিনিট
+      <button class="set-time-btn" aria-label="সময় সেট করো">সেট</button>
+      <div class="current-time-display" style="margin-left:auto; font-size:0.9em; color:#bbb; user-select:none;"></div>
+    </div>
+  </div>
+
+  <script>
+    const countdownElement = document.getElementById("countdown");
+    const startBtn = document.getElementById("startBtn");
+    const themeToggle = document.getElementById("themeToggle");
+    const totalProgressBar = document.getElementById("totalProgressBar");
+
+    // Deadline Dates
+    const deadline1 = new Date("2025-07-20T10:00:00+06:00").getTime();
+    const deadline2 = new Date("2025-07-22T10:00:00+06:00").getTime();
+
+    let intervalId;
+    let clickCount = 0;
+
+    // Calculate total available study time in milliseconds (deadline2 - now OR deadline2 - deadline1 if past deadline1)
+    function getTotalAvailableTime() {
+      const now = Date.now();
+      // total available time is between now and deadline2 if now < deadline2
+      return Math.max(0, deadline2 - now);
+    }
+
+    // Initialize countdown & start timer
+    function updateCountdown() {
+      const now = Date.now();
+      let distance;
+      if (now < deadline1) {
+        distance = deadline1 - now;
+        countdownElement.innerText = `১ম সময়সীমা বাকি: ${formatDuration(distance)}`;
+      } else if (now >= deadline1 && now < deadline2) {
+        distance = deadline2 - now;
+        countdownElement.innerText = `২য় সময়সীমা বাকি: ${formatDuration(distance)}`;
+      } else {
+        countdownElement.innerText = "⛔ সব সময় শেষ!";
+        clearInterval(intervalId);
+        intervalId = null;
+      }
+    }
+    function formatDuration(ms) {
+      const d = Math.floor(ms / (1000 * 60 * 60 * 24));
+      const h = Math.floor((ms % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const m = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
+      const s = Math.floor((ms % (1000 * 60)) / 1000);
+      return `${d} দিন ${h} ঘন্টা ${m} মিনিট ${s} সেকেন্ড`;
+    }
+
+    startBtn.addEventListener("click", () => {
+      clickCount++;
+      if (clickCount === 3) {
+        localStorage.clear();
+        location.reload();
+      }
+      if (!intervalId) {
+        updateCountdown();
+        intervalId = setInterval(updateCountdown, 1000);
+      }
+    });
+
+    themeToggle.addEventListener("click", () => {
+      document.body.classList.toggle("light");
+    });
+
+    // Load & save checkboxes to localStorage
+    const checkboxes = document.querySelectorAll("input[type='checkbox']");
+    checkboxes.forEach(cb => {
+      const key = cb.dataset.key;
+      cb.checked = localStorage.getItem(key) === "true";
+      cb.addEventListener("change", () => {
+        localStorage.setItem(key, cb.checked);
+        updateProgressBars();
+        updateTotalProgressBar();
+      });
+    });
+
+    // Update individual progress bars
+    function updateProgressBars() {
+      document.querySelectorAll(".chapter").forEach(chapter => {
+        const keys = chapter.dataset.keys.split(",");
+        const total = keys.length;
+        let done = 0;
+        keys.forEach(k => {
+          if (localStorage.getItem(k) === "true") done++;
+        });
+        const percent = (done / total) * 100;
+        const progressBar = chapter.querySelector(".progress-bar");
+        if (progressBar) {
+          progressBar.style.width = `${percent}%`;
+        }
+      });
+    }
+
+    // Update total progress bar (average of all chapters)
+    function updateTotalProgressBar() {
+      const chapters = document.querySelectorAll(".chapter");
+      let totalPercent = 0;
+      chapters.forEach(chapter => {
+        const keys = chapter.dataset.keys.split(",");
+        const total = keys.length;
+        let done = 0;
+        keys.forEach(k => {
+          if (localStorage.getItem(k) === "true") done++;
+        });
+        totalPercent += (done / total);
+      });
+      const avgPercent = (totalPercent / chapters.length) * 100;
+      totalProgressBar.style.width = `${avgPercent}%`;
+    }
+
+    // Lock expired chapters & disable inputs
+    function lockExpiredChapters() {
+      const now = Date.now();
+      document.querySelectorAll(".chapter").forEach((chapter, index) => {
+        let isLocked = false;
+        if (index < 3 && now > deadline1) {
+          isLocked = true;
+        }
+        if (index >= 3 && now > deadline2) {
+          isLocked = true;
+        }
+        if (isLocked) {
+          chapter.classList.add("locked");
+          chapter.querySelectorAll("input[type='checkbox'], .set-time-btn, .hours-input, .minutes-input").forEach(el => {
+            el.disabled = true;
+          });
+          if (!chapter.querySelector(".expired-label")) {
+            const expiredLabel = document.createElement("div");
+            expiredLabel.classList.add("expired-label");
+            expiredLabel.innerText = "⛔ সময় শেষ - Expired";
+            chapter.appendChild(expiredLabel);
+          }
+        } else {
+          // If unlocked and expired-label exists, remove it
+          chapter.classList.remove("locked");
+          chapter.querySelectorAll("input[type='checkbox'], .set-time-btn, .hours-input, .minutes-input").forEach(el => {
+            el.disabled = false;
+          });
+          const expiredLabel = chapter.querySelector(".expired-label");
+          if (expiredLabel) expiredLabel.remove();
+        }
+      });
+    }
+
+    // Handle time setting UI
+    function setupTimeSetters() {
+      const chapters = document.querySelectorAll(".chapter");
+      const maxTotalTimeMs = deadline2 - Date.now(); // total max remaining time from now
+
+      chapters.forEach(chapter => {
+        const index = Number(chapter.dataset.index);
+        // Load saved time (milliseconds)
+        const savedTimeMs = parseInt(localStorage.getItem(`chapter-time-${index}`)) || 0;
+        chapter.dataset.time = savedTimeMs;
+
+        // Update current time display
+        updateCurrentTimeDisplay(chapter);
+
+        const btn = chapter.querySelector(".set-time-btn");
+        const hoursInput = chapter.querySelector(".hours-input");
+        const minutesInput = chapter.querySelector(".minutes-input");
+
+        btn.addEventListener("click", () => {
+          let h = parseInt(hoursInput.value) || 0;
+          let m = parseInt(minutesInput.value) || 0;
+
+          if (h < 0) h = 0;
+          if (m < 0) m = 0;
+          if (m > 59) m = 59;
+
+          // convert input time to ms
+          const inputMs = (h * 60 * 60 * 1000) + (m * 60 * 1000);
+
+          // Maximum allowed time for a chapter is total available time (deadline2 - now)
+          // and also user can't set time more than the total time left
+          const totalAvailable = getTotalAvailableTime();
+
+          if (inputMs > totalAvailable) {
+            alert("সেট করা সময় মোট সময়সীমার চেয়ে বেশি হতে পারবে না। দয়া করে কম সময় দিন।");
+            return;
+          }
+
+          chapter.dataset.time = inputMs;
+          localStorage.setItem(`chapter-time-${index}`, inputMs);
+          updateCurrentTimeDisplay(chapter);
+
+          // Clear inputs after setting
+          hoursInput.value = "";
+          minutesInput.value = "";
+        });
+      });
+    }
+
+    // Show currently set time in chapter card
+    function updateCurrentTimeDisplay(chapter) {
+      const timeMs = Number(chapter.dataset.time) || 0;
+      const display = chapter.querySelector(".current-time-display");
+      if (timeMs === 0) {
+        display.innerText = "সময় সেট করা হয় নি";
+      } else {
+        const h = Math.floor(timeMs / (1000 * 60 * 60));
+        const m = Math.floor((timeMs % (1000 * 60 * 60)) / (1000 * 60));
+        display.innerText = `সেট করা সময়: ${h} ঘণ্টা ${m} মিনিট`;
+      }
+    }
+
+    // On page load
+    window.addEventListener("load", () => {
+      // Load checkbox states
+      checkboxes.forEach(cb => {
+        const key = cb.dataset.key;
+        cb.checked = localStorage.getItem(key) === "true";
+      });
+      updateProgressBars();
+      updateTotalProgressBar();
+      lockExpiredChapters();
+      setupTimeSetters();
+    });
+
+    // Periodically lock chapters if expired
+    setInterval(() => {
+      lockExpiredChapters();
+    }, 60000);
+
+  </script>
 </body>
 </html>
